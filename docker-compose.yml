@@ -1,0 +1,41 @@
+# docker-compose.yml — Production 3-Tier Orchestration (Frontend + FastAPI Middleware + Local Ollama)
+version: "3.9"
+
+services:
+  ahd-middleware:
+    build: .
+    container_name: ahd_jailbreak_api
+    ports:
+      - "8000:8000"
+    environment:
+      - AHD_POLICY_CONFIG=configs/runtime_policy.yaml
+      - OLLAMA_ENDPOINT=http://ollama-llm:11434/api/chat
+      - LOG_RAW_PROMPTS=false
+      - AHD_HMAC_SALT=${AHD_HMAC_SALT:-9f8e7d6c5b4a3210a8f4c9123b7d51e09f8e7d6c5b4a3210a8f4c9123b7d51e0}
+    volumes:
+      - ./models/snapshots:/app/models/snapshots:ro
+      - ahd_audit_db:/app/data/audit
+    restart: unless-stopped
+
+  ahd-frontend:
+    build:
+      context: ./project_files
+    container_name: ahd_jailbreak_ui
+    ports:
+      - "5173:5173"
+    depends_on:
+      - ahd-middleware
+    restart: unless-stopped
+
+  ollama-llm:
+    image: ollama/ollama:latest
+    container_name: ahd_target_llm
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_weights:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ahd_audit_db:
+  ollama_weights:

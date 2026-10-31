@@ -1,0 +1,75 @@
+{
+  "seed": 42,
+  "ablations": [
+    {
+      "id": "Full AHD-Jailbreak (B4)",
+      "disabled_component": "None (Complete 14-Module Architecture)",
+      "combined_f1": "90.05%",
+      "delta_f1": "0.00%",
+      "xstest_fpr": "0.00%",
+      "ece": 0.0502,
+      "mcnemar_chi2": "Ref (1.0000)",
+      "significance": "Reference Benchmark"
+    },
+    {
+      "id": "Ablation A1",
+      "disabled_component": "No Conversation Context (Remove V_T turns & E_ctx)",
+      "combined_f1": "84.46%",
+      "delta_f1": "-5.59%",
+      "xstest_fpr": "0.00%",
+      "ece": 0.064,
+      "mcnemar_chi2": "15.04 (p = 0.0001)",
+      "significance": "Statistically Significant Degradation (p < 0.001)"
+    },
+    {
+      "id": "Ablation A2",
+      "disabled_component": "No Dense Semantic Features (Zero out 384-D MiniLM)",
+      "combined_f1": "22.40%",
+      "delta_f1": "-67.65%",
+      "xstest_fpr": "3.19%",
+      "ece": 0.1322,
+      "mcnemar_chi2": "136.10 (p < 0.0001)",
+      "significance": "Catastrophic Feature Collapse (p < 0.0001)"
+    },
+    {
+      "id": "Ablation A3",
+      "disabled_component": "Pairwise Graph Only (|e|=2 k-NN GCN edges)",
+      "combined_f1": "85.35%",
+      "delta_f1": "-4.70%",
+      "xstest_fpr": "5.32%",
+      "ece": 0.0478,
+      "mcnemar_chi2": "10.24 (p = 0.0014)",
+      "significance": "Loss of High-Order Context & Safe FPR Inflation (p < 0.01)"
+    },
+    {
+      "id": "Ablation A4",
+      "disabled_component": "No Adaptive Updates (Static G_0 topology)",
+      "combined_f1": "84.46%",
+      "delta_f1": "-5.59%",
+      "xstest_fpr": "5.32%",
+      "ece": 0.051,
+      "mcnemar_chi2": "15.04 (p = 0.0001)",
+      "significance": "Failure to absorb emerging attack clusters (p < 0.001)"
+    },
+    {
+      "id": "Ablation A5",
+      "disabled_component": "No OOD Novelty Signal (Remove S_OOD)",
+      "combined_f1": "84.37%",
+      "delta_f1": "-5.68%",
+      "xstest_fpr": "4.26%",
+      "ece": 0.0668,
+      "mcnemar_chi2": "15.04 (p = 0.0001)",
+      "significance": "Blunt OOD cluster anomaly sensitivity (p < 0.001)"
+    },
+    {
+      "id": "Ablation A6",
+      "disabled_component": "Uncalibrated Logits (T_cal = 1.0)",
+      "combined_f1": "83.38%",
+      "delta_f1": "-6.67%",
+      "xstest_fpr": "12.77%",
+      "ece": 0.1371,
+      "mcnemar_chi2": "21.04 (p < 0.0001)",
+      "significance": "Severe Over-Refusal on Safe Technical Prompts (12.77% FPR)"
+    }
+  ]
+}

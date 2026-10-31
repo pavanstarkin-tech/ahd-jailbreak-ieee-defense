@@ -1,0 +1,7 @@
+split_name,sample_count,unsafe_count,safe_count,primary_sources,isolation_protocol
+train,8000,4000,4000,WildGuardTrain;WildJailbreak_Train;ScaleAI_MHJ_Train,Grouped by connected components; zero cross-split leakage.
+val,2000,1000,1000,WildGuardVal;WildJailbreak_Val,Grouped by connected components; zero cross-split leakage.
+test_id,1725,862,863,WildGuardTest,Grouped by connected components; zero cross-split leakage.
+test_ood_family,1200,1200,0,AF-04_Base64;AF-05_GCG;AF-06_AutoDAN;AF-07_Crescendo,Grouped by connected components; zero cross-split leakage.
+test_cross_dataset,800,800,0,JailbreakBench;StrongREJECT,Grouped by connected components; zero cross-split leakage.
+test_benign_fpr,1450,0,1450,XSTest_Safe;OR_Bench_Hard_1K,Grouped by connected components; zero cross-split leakage.

@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper-bg: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --ink-primary: #0F172A;
+  --ink-secondary: #334155;
+  --ink-muted: #64748B;
+  --hairline-border: #E2E8F0;
+
+  --accent-cerulean: #0284C7;
+  --accent-teal: #0D9488;
+  --accent-emerald: #059669;
+  --accent-amber: #D97706;
+  --accent-crimson: #DC2626;
+  --accent-violet: #7C3AED;
+}
+
+body {
+  background-color: var(--paper-bg);
+  color: var(--ink-secondary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Graph-Paper Engineering Texture */
+.academic-grid-pattern {
+  background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Mathematical Equation Variables */
+.math-token {
+  display: inline-block;
+  padding: 1px 5px;
+  margin: 0 2px;
+  border-radius: 4px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Fira Code', monospace;
+  font-weight: 600;
+}
+.math-token:hover, .math-token.active {
+  background: #E0F2FE;
+  border-color: #38BDF8;
+  color: #0284C7;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.15);
+}

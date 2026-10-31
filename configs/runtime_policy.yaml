@@ -1,0 +1,25 @@
+# AHD-Jailbreak Runtime Policy Configuration
+version: "1.0.0"
+defense:
+  mode: "adaptive"
+  active_snapshot: "graph_v4"
+  temperature_calibration: 0.84
+  thresholds:
+    tau_allow: 0.35
+    tau_block: 0.70
+    tau_uncertainty: 0.45
+  feature_extractor:
+    dimension: 394
+    semantic_encoder: "sentence-transformers/all-MiniLM-L6-v2"
+    pre_nfkc_surface_indicators: 10
+adaptation:
+  quarantine_buffer_size: 500
+  alpha_ema: 0.25
+  max_delta_w: 0.15
+  anchor_validation_gate:
+    f1_tolerance: 0.005
+    fpr_tolerance: 0.010
+privacy:
+  log_raw_prompts: false
+  hash_algorithm: "HMAC-SHA256"
+  db_mode: "SQLite_WAL"

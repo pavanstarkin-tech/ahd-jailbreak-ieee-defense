@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+project_files/node_modules/
+
+# Build artifacts
+project_files/dist/
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+
+# Temporary files
+temp_live_export.html
+*.log
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
