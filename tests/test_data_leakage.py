@@ -39,3 +39,20 @@ def test_zero_cross_split_data_leakage():
     assert len(train_val_leak) == 0, f"Found {len(train_val_leak)} leaked prompts between train and val"
     assert len(train_test_leak) == 0, f"Found {len(train_test_leak)} leaked prompts between train and test"
     assert len(val_test_leak) == 0, f"Found {len(val_test_leak)} leaked prompts between val and test"
+
+
+def test_4_regime_leakage_audit_guarantees():
+    import json
+    split_manifest_path = "data/manifests/split_manifest.json"
+    assert os.path.exists(split_manifest_path), "split_manifest.json not found"
+    with open(split_manifest_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    regimes = data["leakage_audit_regimes"]
+    # R1-R3 must guarantee 0.0% near-duplicate overlap
+    assert regimes["R1_cos90"]["near_dup_overlap_pct"] == 0.0
+    assert regimes["R2_cos80"]["near_dup_overlap_pct"] == 0.0
+    assert regimes["R3_cos70_template_disjoint"]["near_dup_overlap_pct"] == 0.0
+
+    # R3 must guarantee 0.0% shared template skeletons
+    assert regimes["R3_cos70_template_disjoint"]["template_overlap_pct"] == 0.0

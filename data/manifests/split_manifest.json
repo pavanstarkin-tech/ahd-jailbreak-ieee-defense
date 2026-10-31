@@ -1,0 +1,67 @@
+{
+  "dataset_name": "AHD-Jailbreak Multi-Benchmark Suite",
+  "total_samples": 15175,
+  "partitions": {
+    "train": {
+      "count": 8000,
+      "unsafe": 4000,
+      "safe": 4000
+    },
+    "val": {
+      "count": 2000,
+      "unsafe": 900,
+      "safe": 1100,
+      "locked_anchors": 500
+    },
+    "test_id": {
+      "count": 1725,
+      "unsafe": 862,
+      "safe": 863
+    },
+    "test_ood": {
+      "count": 1200,
+      "unsafe": 1200,
+      "safe": 0,
+      "windows": {
+        "B1": 300,
+        "B2": 300,
+        "B3": 300,
+        "B4": 300
+      }
+    },
+    "test_cross": {
+      "count": 800,
+      "unsafe": 700,
+      "safe": 100
+    },
+    "test_fpr": {
+      "count": 1450,
+      "unsafe": 0,
+      "safe": 1450,
+      "xstest": 450,
+      "or_bench": 1000
+    }
+  },
+  "leakage_audit_regimes": {
+    "R0_unfiltered": {
+      "count": 1725,
+      "near_dup_overlap_pct": 9.62,
+      "template_overlap_pct": 9.86
+    },
+    "R1_cos90": {
+      "count": 1559,
+      "near_dup_overlap_pct": 0.0,
+      "template_overlap_pct": 0.77
+    },
+    "R2_cos80": {
+      "count": 1505,
+      "near_dup_overlap_pct": 0.0,
+      "template_overlap_pct": 0.53
+    },
+    "R3_cos70_template_disjoint": {
+      "count": 1368,
+      "near_dup_overlap_pct": 0.0,
+      "template_overlap_pct": 0.0
+    }
+  }
+}

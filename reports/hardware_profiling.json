@@ -1,0 +1,42 @@
+{
+  "hardware_environment": {
+    "cpu_model": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "cores": 8,
+    "ram_gb": 15.65,
+    "gpu_model": "None (CPU Execution)",
+    "os": "Windows 10",
+    "python_version": "3.11.9",
+    "torch_version": "2.15.0+cpu"
+  },
+  "profiles": {
+    "pytorch_fp32": {
+      "enc_ms": 8.52,
+      "hgnn_ms": 0.32,
+      "p50_ms": 8.87,
+      "p95_ms": 10.92,
+      "p99_ms": 12.65,
+      "rss_mb": 575.82,
+      "throughput_rps": 109.2
+    },
+    "onnx_fp32": {
+      "enc_ms": 7.25,
+      "hgnn_ms": 0.32,
+      "p50_ms": 7.6,
+      "p95_ms": 9.54,
+      "p99_ms": 10.94,
+      "rss_mb": 576.19,
+      "throughput_rps": 126.9
+    },
+    "onnx_int8": {
+      "enc_ms": 5.7,
+      "hgnn_ms": 0.32,
+      "p50_ms": 6.0,
+      "p95_ms": 8.25,
+      "p99_ms": 10.72,
+      "rss_mb": 576.2,
+      "throughput_rps": 157.5,
+      "encoder_disk_mb": 22.26,
+      "snapshot_disk_mb": 14.8
+    }
+  }
+}

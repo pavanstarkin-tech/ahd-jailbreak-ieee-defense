@@ -1,84 +1,372 @@
 {
-  "seeds": [
-    42,
-    100,
-    2026,
-    7,
-    99
-  ],
-  "calibration_target": "Validation FPR <= 5.0%",
-  "models": {
+  "calibration": {
+    "mean_t_cal": 2.54,
+    "uncalibrated_ece": 0.1483,
+    "calibrated_ece": 0.044
+  },
+  "leakage_regime_audit_5seed": {
+    "R0": {
+      "B2a": 71.4,
+      "B2b": 75.53,
+      "B3": 75.67,
+      "B4": 76.43
+    },
+    "R1": {
+      "B2a": 70.98,
+      "B2b": 75.56,
+      "B3": 75.74,
+      "B4": 76.56
+    },
+    "R2": {
+      "B2a": 70.53,
+      "B2b": 75.24,
+      "B3": 75.48,
+      "B4": 76.35
+    },
+    "R3": {
+      "B2a": 67.49,
+      "B2b": 72.63,
+      "B3": 72.83,
+      "B4": 73.83
+    }
+  },
+  "master_benchmark_5seed": {
+    "seeds": [
+      42,
+      100,
+      2026,
+      7,
+      99
+    ],
     "B1": {
-      "name": "Rule-Based Heuristic Filter",
-      "id_test_f1": "79.02 \u00b1 0.00",
-      "auroc": 0.9312,
-      "auprc": 0.9247,
-      "xstest_safe_fpr": "35.11%",
-      "held_out_ood_f1": "92.94%",
-      "cross_dataset_jbb_f1": "85.44%",
-      "cpu_hop_p50_p95_ms": "0.43 / 0.89",
-      "mcnemar_p_vs_b4": "< 0.0001",
-      "verdict": "Catastrophic over-refusal on benign homonyms (35.11% FPR)"
+      "comb_f1_mean": 1.86,
+      "comb_f1_std": 0.0,
+      "comb_f1_5seeds": [
+        1.86,
+        1.86,
+        1.86,
+        1.86,
+        1.86
+      ],
+      "comb_f1_95ci": [
+        1.86,
+        1.86
+      ],
+      "test_id_wilson_95ci": [
+        0.0,
+        0.25
+      ],
+      "test_id_R0": 0.0,
+      "test_id_R1": 0.0,
+      "test_id_R2": 0.0,
+      "test_id_R3": 0.0,
+      "test_ood_f1": 4.08,
+      "test_cross_f1": 0.0,
+      "xstest_fpr_actionable": 0.0,
+      "xstest_fpr_hard_block": 0.0,
+      "or_bench_fpr": 0.0,
+      "auroc": 0.6271,
+      "auprc": 0.7391,
+      "mcnemar_vs_b4": {
+        "chi2": 47.7933,
+        "p_value": 0.0,
+        "discordant_b": 1946,
+        "discordant_c": 1537
+      }
     },
     "B2a": {
-      "name": "Classical TF-IDF + Logistic Reg.",
-      "id_test_f1": "100.00 \u00b1 0.00",
-      "auroc": 1.0,
-      "auprc": 1.0,
-      "xstest_safe_fpr": "23.40%",
-      "held_out_ood_f1": "97.67%",
-      "cross_dataset_jbb_f1": "99.03%",
-      "cpu_hop_p50_p95_ms": "1.28 / 1.97",
-      "mcnemar_p_vs_b4": "0.1814",
-      "verdict": "Keyword memorization collapses on safe technical terms (23.40% FPR)"
+      "comb_f1_mean": 56.16,
+      "comb_f1_std": 0.0,
+      "comb_f1_5seeds": [
+        56.16,
+        56.16,
+        56.16,
+        56.16,
+        56.16
+      ],
+      "comb_f1_95ci": [
+        56.16,
+        56.16
+      ],
+      "test_id_wilson_95ci": [
+        68.63,
+        73.21
+      ],
+      "test_id_R0": 71.4,
+      "test_id_R1": 70.98,
+      "test_id_R2": 70.53,
+      "test_id_R3": 67.49,
+      "test_ood_f1": 60.06,
+      "test_cross_f1": 81.52,
+      "xstest_fpr_actionable": 87.11,
+      "xstest_fpr_hard_block": 50.67,
+      "or_bench_fpr": 87.2,
+      "auroc": 0.4998,
+      "auprc": 0.5335,
+      "mcnemar_vs_b4": {
+        "chi2": 46.3158,
+        "p_value": 0.0,
+        "discordant_b": 633,
+        "discordant_c": 412
+      }
     },
     "B2b": {
-      "name": "Matched-Encoder 394-D Dense MLP",
-      "id_test_f1": "100.00 \u00b1 0.00",
-      "auroc": 1.0,
-      "auprc": 1.0,
-      "xstest_safe_fpr": "0.00%",
-      "held_out_ood_f1": "77.55%",
-      "cross_dataset_jbb_f1": "74.96%",
-      "cpu_hop_p50_p95_ms": "1.12 / 1.78",
-      "mcnemar_p_vs_b4": "< 0.0001",
-      "verdict": "Zero over-refusal but collapses on held-out OOD attack families (-16.12% F1 vs B4)"
+      "comb_f1_mean": 59.5,
+      "comb_f1_std": 2.56,
+      "comb_f1_5seeds": [
+        58.69,
+        60.58,
+        60.61,
+        62.15,
+        55.49
+      ],
+      "comb_f1_95ci": [
+        57.41,
+        61.21
+      ],
+      "test_id_wilson_95ci": [
+        73.32,
+        77.65
+      ],
+      "test_id_R0": 75.53,
+      "test_id_R1": 75.56,
+      "test_id_R2": 75.24,
+      "test_id_R3": 72.63,
+      "test_ood_f1": 63.49,
+      "test_cross_f1": 81.93,
+      "xstest_fpr_actionable": 75.96,
+      "xstest_fpr_hard_block": 60.31,
+      "or_bench_fpr": 74.86,
+      "auroc": 0.5599,
+      "auprc": 0.5846,
+      "mcnemar_vs_b4": {
+        "chi2": 17.161,
+        "p_value": 3.4e-05,
+        "discordant_b": 566,
+        "discordant_c": 434
+      }
     },
     "B3": {
-      "name": "Static Hypergraph (G_0)",
-      "id_test_f1": "100.00 \u00b1 0.00",
-      "auroc": 1.0,
-      "auprc": 1.0,
-      "xstest_safe_fpr": "2.98%",
-      "held_out_ood_f1": "80.74%",
-      "cross_dataset_jbb_f1": "74.47%",
-      "cpu_hop_p50_p95_ms": "2.24 / 3.17",
-      "mcnemar_p_vs_b4": "0.0001",
-      "verdict": "Improves OOD F1 over flat MLP by +3.19% but lacks online adaptation"
+      "comb_f1_mean": 58.72,
+      "comb_f1_std": 2.39,
+      "comb_f1_5seeds": [
+        58.69,
+        58.57,
+        58.64,
+        62.24,
+        55.48
+      ],
+      "comb_f1_95ci": [
+        56.75,
+        60.78
+      ],
+      "test_id_wilson_95ci": [
+        73.45,
+        77.78
+      ],
+      "test_id_R0": 75.67,
+      "test_id_R1": 75.74,
+      "test_id_R2": 75.48,
+      "test_id_R3": 72.83,
+      "test_ood_f1": 59.63,
+      "test_cross_f1": 82.39,
+      "xstest_fpr_actionable": 77.56,
+      "xstest_fpr_hard_block": 49.07,
+      "or_bench_fpr": 76.76,
+      "auroc": 0.5613,
+      "auprc": 0.6228,
+      "mcnemar_vs_b4": {
+        "chi2": 11.2262,
+        "p_value": 0.000807,
+        "discordant_b": 574,
+        "discordant_c": 465
+      }
     },
     "B4": {
-      "name": "Adaptive Hypergraph (AHD-Jailbreak)",
-      "id_test_f1": "100.00 \u00b1 0.00",
-      "auroc": 1.0,
-      "auprc": 1.0,
-      "xstest_safe_fpr": "1.49%",
-      "held_out_ood_f1": "93.67%",
-      "cross_dataset_jbb_f1": "90.32%",
-      "cpu_hop_p50_p95_ms": "2.25 / 3.26",
-      "mcnemar_p_vs_b4": "Reference",
-      "verdict": "Optimal safety-usability frontier: 93.67% OOD F1, 90.32% JBB F1, 1.49% XSTest FPR"
+      "comb_f1_mean": 64.4,
+      "comb_f1_std": 0.95,
+      "comb_f1_5seeds": [
+        63.63,
+        65.19,
+        65.12,
+        64.91,
+        63.14
+      ],
+      "comb_f1_95ci": [
+        63.59,
+        65.09
+      ],
+      "test_id_wilson_95ci": [
+        74.34,
+        78.61
+      ],
+      "test_id_R0": 76.43,
+      "test_id_R1": 76.56,
+      "test_id_R2": 76.35,
+      "test_id_R3": 73.83,
+      "test_ood_f1": 77.44,
+      "test_cross_f1": 86.29,
+      "xstest_fpr_actionable": 80.31,
+      "xstest_fpr_hard_block": 7.51,
+      "or_bench_fpr": 79.96,
+      "auroc": 0.5593,
+      "auprc": 0.5648
     },
     "B5": {
-      "name": "Meta Llama-Prompt-Guard-2-86M",
-      "id_test_f1": "73.68 \u00b1 0.00",
-      "auroc": 0.9815,
-      "auprc": 0.9837,
-      "xstest_safe_fpr": "0.00%",
-      "held_out_ood_f1": "71.76%",
-      "cross_dataset_jbb_f1": "69.23%",
-      "cpu_hop_p50_p95_ms": "1.32 / 2.14",
-      "mcnemar_p_vs_b4": "< 0.0001",
-      "verdict": "Misses multi-turn drift and zero-day OOD jailbreak variations"
+      "comb_f1_mean": 56.07,
+      "comb_f1_std": 3.08,
+      "comb_f1_5seeds": [
+        55.76,
+        55.17,
+        56.64,
+        60.67,
+        52.13
+      ],
+      "comb_f1_95ci": [
+        53.64,
+        58.59
+      ],
+      "test_id_wilson_95ci": [
+        70.87,
+        75.34
+      ],
+      "test_id_R0": 73.22,
+      "test_id_R1": 73.23,
+      "test_id_R2": 72.84,
+      "test_id_R3": 69.77,
+      "test_ood_f1": 55.65,
+      "test_cross_f1": 76.86,
+      "xstest_fpr_actionable": 69.96,
+      "xstest_fpr_hard_block": 5.78,
+      "or_bench_fpr": 69.4,
+      "auroc": 0.5913,
+      "auprc": 0.621,
+      "mcnemar_vs_b4": {
+        "chi2": 10.2796,
+        "p_value": 0.001345,
+        "discordant_b": 713,
+        "discordant_c": 596
+      }
+    }
+  },
+  "prequential_stream_windows": {
+    "B1_base64": {
+      "G0_static_f1": 0.0,
+      "Gt_adaptive_f1": 2.5
+    },
+    "B2_gcg": {
+      "G0_static_f1": 80.77,
+      "Gt_adaptive_f1": 91.01
+    },
+    "B3_autodan": {
+      "G0_static_f1": 71.72,
+      "Gt_adaptive_f1": 85.81,
+      "poisoned_anchor_f1": 16.22,
+      "rollback_triggered": true
+    },
+    "B4_crescendo": {
+      "G0_static_f1": 61.36,
+      "Gt_adaptive_f1": 96.03
+    }
+  },
+  "ablations_5seed": {
+    "Full_B4": {
+      "comb_f1_mean": 64.4,
+      "comb_f1_std": 0.95,
+      "comb_f1_5seeds": [
+        63.63,
+        65.19,
+        65.12,
+        64.91,
+        63.14
+      ],
+      "test_ood_f1": 77.44,
+      "xstest_fpr": 80.31,
+      "delta_f1_vs_b4": -0.0
+    },
+    "A1_no_context": {
+      "comb_f1_mean": 64.4,
+      "comb_f1_std": 0.95,
+      "comb_f1_5seeds": [
+        63.63,
+        65.19,
+        65.12,
+        64.91,
+        63.14
+      ],
+      "test_ood_f1": 77.44,
+      "xstest_fpr": 80.31,
+      "delta_f1_vs_b4": -0.0
+    },
+    "A2_no_dense": {
+      "comb_f1_mean": 13.48,
+      "comb_f1_std": 11.58,
+      "comb_f1_5seeds": [
+        0.08,
+        23.36,
+        1.86,
+        18.82,
+        23.25
+      ],
+      "test_ood_f1": 24.95,
+      "xstest_fpr": 80.31,
+      "delta_f1_vs_b4": -50.92
+    },
+    "A3_pairwise_gnn": {
+      "comb_f1_mean": 58.78,
+      "comb_f1_std": 2.41,
+      "comb_f1_5seeds": [
+        58.91,
+        58.49,
+        58.76,
+        62.28,
+        55.48
+      ],
+      "test_ood_f1": 60.4,
+      "xstest_fpr": 76.89,
+      "delta_f1_vs_b4": -5.62
+    },
+    "A4_static_g0": {
+      "comb_f1_mean": 58.72,
+      "comb_f1_std": 2.39,
+      "comb_f1_5seeds": [
+        58.69,
+        58.57,
+        58.64,
+        62.24,
+        55.48
+      ],
+      "test_ood_f1": 59.63,
+      "xstest_fpr": 77.56,
+      "delta_f1_vs_b4": -5.68
+    },
+    "A5_no_ood_signal": {
+      "comb_f1_mean": 63.24,
+      "comb_f1_std": 1.85,
+      "comb_f1_5seeds": [
+        61.42,
+        64.76,
+        64.67,
+        64.33,
+        61.03
+      ],
+      "test_ood_f1": 73.5,
+      "xstest_fpr": 80.31,
+      "delta_f1_vs_b4": -1.16
+    },
+    "A6_uncalibrated": {
+      "comb_f1_mean": 59.5,
+      "comb_f1_std": 2.56,
+      "comb_f1_5seeds": [
+        58.69,
+        60.58,
+        60.61,
+        62.15,
+        55.49
+      ],
+      "test_ood_f1": 63.49,
+      "xstest_fpr": 75.96,
+      "delta_f1_vs_b4": -4.9
     }
   }
 }
