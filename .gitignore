@@ -18,6 +18,7 @@ ENV/
 # Temporary files
 temp_live_export.html
 *.log
+*.db*
 .DS_Store
 Thumbs.db
 

@@ -1,0 +1,27 @@
+{
+  "architectures": [
+    "AHDForJailbreakDetection"
+  ],
+  "model_type": "ahd_jailbreak",
+  "feature_dim": 394,
+  "surface_dim": 10,
+  "semantic_dim": 384,
+  "hidden_dim": 128,
+  "num_layers": 2,
+  "num_nodes_V0": 4084,
+  "num_hyperedges_E0": 198,
+  "window_turns": 5,
+  "lambda_base": 0.20,
+  "tau_allow": 0.35,
+  "tau_block": 0.70,
+  "tau_uncertainty": 0.45,
+  "temperature_cal": 4.56,
+  "k_neighbors": 10,
+  "max_ego_nodes": 120,
+  "ema_alpha": 0.25,
+  "ema_max_delta": 0.15,
+  "core_anchor_lock_pct": 0.80,
+  "base_encoder": "sentence-transformers/all-MiniLM-L6-v2",
+  "torch_dtype": "float32",
+  "transformers_version": "4.40.0"
+}

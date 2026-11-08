@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ahd-jailbreak"
+version = "1.0.0"
+description = "AHD-Jailbreak: Adaptive Hypergraph Defense with Anchor-Gated Topology Evolution for Large Language Models"
+readme = "README.md"
+authors = [
+    { name = "AHD Research Team", email = "security@ahd-jailbreak.org" }
+]
+license = "Apache-2.0"
+keywords = [
+    "llm-security",
+    "jailbreak-defense",
+    "hypergraph-neural-networks",
+    "guardrails",
+    "adversarial-robustness",
+    "safety-alignment"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0.0",
+    "transformers>=4.36.0",
+    "sentence-transformers>=2.2.0",
+    "onnxruntime>=1.16.0",
+    "numpy>=1.24.0",
+    "scipy>=1.11.0",
+    "scikit-learn>=1.3.0",
+    "pydantic>=2.4.0",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "requests>=2.31.0",
+    "psutil>=5.9.0"
+]
+
+[project.optional-dependencies]
+demo = [
+    "gradio>=4.0.0"
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0"
+]
+all = [
+    "ahd-jailbreak[demo,dev]"
+]
+
+[project.urls]
+"Homepage" = "https://huggingface.co/ahd-security/ahd-jailbreak-v1"
+"Repository" = "https://github.com/pavanstarkin-tech/ahd-jailbreak-ieee-defense"
+"Paper" = "https://arxiv.org/abs/2603.xxxxx"
+
+[tool.setuptools.packages.find]
+include = ["ahd_jailbreak*"]
