@@ -105,3 +105,4 @@ class AHDForJailbreakDetection(PreTrainedModel):
             "hidden_states": z2,
             "query_representation": query_repr
         }
+

@@ -126,3 +126,4 @@ if __name__ == "__main__":
         export_and_quantize_minilm()
     if args.profile:
         benchmark_cpu_latency(args.model_path)
+

@@ -126,8 +126,11 @@ class AHDFeatureExtractor:
         upper_ratio = min(upper_count / total_chars, 1.0)
         digit_ratio = min(digit_count / total_chars, 1.0)
 
-        # 6. Base64 Indicator
-        has_b64 = 1.0 if bool(self.BASE64_PATTERN.search(raw_text)) else 0.0
+        # 6. Base64 Indicator (Contiguous or Obfuscated Payload Blocks)
+        has_b64 = 1.0 if bool(
+            self.BASE64_PATTERN.search(raw_text) or
+            (re.search(r'(?i)\b(?:base64|b64|decode)\b', raw_text) and re.search(r'[A-Za-z0-9+/_-]{10,}', raw_text))
+        ) else 0.0
 
         # 7. Zero-Width & Unicode Homoglyphs
         zw_chars = sum(1 for c in raw_text if ord(c) in (0x200B, 0x200C, 0x200D, 0xFEFF, 0x00AD, 0x2060))
@@ -245,3 +248,4 @@ class AHDFeatureExtractor:
             features.append(x)
             metadata.append(m)
         return np.stack(features, axis=0), metadata
+

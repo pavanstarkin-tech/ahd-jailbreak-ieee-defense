@@ -104,3 +104,4 @@ class AHDLLMWrapper:
             return self.llm_client.messages.create(messages=messages, *args, **kwargs)
         else:
             raise TypeError("Unsupported LLM client type. Must be callable or OpenAI/Anthropic SDK client.")
+

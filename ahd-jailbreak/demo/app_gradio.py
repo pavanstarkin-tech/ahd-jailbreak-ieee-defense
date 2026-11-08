@@ -111,7 +111,7 @@ with gr.Blocks(title="AHD-Jailbreak Guardrail Demo", theme=gr.themes.Soft()) as 
     gr.Markdown("""
     # 🛡️ AHD-Jailbreak: Adaptive Hypergraph Defense Guardrail
     ### Pre-Inference Defense against Multi-Turn Crescendo, Obfuscation & Compositional LLM Jailbreaks
-    [📄 Read Research Paper](https://arxiv.org/abs/2603.xxxxx) | [🤗 Hugging Face Model Hub](https://huggingface.co/ahd-security/ahd-jailbreak-v1) | [💻 GitHub Repository](https://github.com/pavanstarkin-tech/ahd-jailbreak-ieee-defense)
+    [📄 Read Research Paper](https://arxiv.org/abs/2603.xxxxx) | [🤗 Hugging Face Model Hub](https://huggingface.co/shesettipavankumarswamy/ahd-jailbreak-v1) | [💻 GitHub Repository](https://github.com/pavanstarkin-tech/ahd-jailbreak-ieee-defense)
     """)
 
     with gr.Row():
@@ -150,3 +150,4 @@ with gr.Blocks(title="AHD-Jailbreak Guardrail Demo", theme=gr.themes.Soft()) as 
 
 if __name__ == "__main__":
     demo.launch(server_name="0.0.0.0", server_port=7860)
+

@@ -44,12 +44,14 @@ class RiskCalibrator:
         edge_weights: List[float],
         turn_drift: float = 0.0,
         ood_distance: float = 0.0,
-        surface_meta: Optional[Dict[str, Any]] = None
+        surface_meta: Optional[Dict[str, Any]] = None,
+        is_single_turn: bool = True
     ) -> Dict[str, Any]:
         """
         Executes calibrated risk fusion:
           P_cal(x) = sigma(l(v_q) / T_cal)
-          R(x) = 0.50 P_cal(x) + 0.25 S_nbr(x) + 0.15 S_ctx(x) + 0.10 S_OOD(x)
+          Single-turn: R(x) = 0.60 P_cal(x) + 0.30 S_nbr(x) + 0.10 S_OOD(x)
+          Multi-turn:  R(x) = 0.50 P_cal(x) + 0.25 S_nbr(x) + 0.15 S_ctx(x) + 0.10 S_OOD(x)
           u(x) = 0.60 H_bin(P_cal(x)) + 0.40 S_OOD(x)
         """
         # 1. Temperature-Scaled Logit
@@ -72,7 +74,10 @@ class RiskCalibrator:
         s_ood = float(np.clip(ood_distance, 0.0, 1.0))
 
         # Eq. 4: Multi-Signal Composite Risk Score R(x)
-        r_x = 0.50 * p_cal + 0.25 * s_nbr + 0.15 * s_ctx + 0.10 * s_ood
+        if is_single_turn:
+            r_x = 0.60 * p_cal + 0.30 * s_nbr + 0.10 * s_ood
+        else:
+            r_x = 0.50 * p_cal + 0.25 * s_nbr + 0.15 * s_ctx + 0.10 * s_ood
         r_x = float(np.clip(r_x, 0.0, 1.0))
 
         # Eq. 5: Epistemic Uncertainty u(x)
@@ -84,12 +89,12 @@ class RiskCalibrator:
         if r_x >= self.tau_block:
             decision = "BLOCK"
             reason = "R_OVER_TAU_BLOCK_HIGH_MALICIOUS_RISK"
-        elif r_x >= self.tau_allow or u_x >= self.tau_uncertainty:
+        elif r_x >= self.tau_allow:
             decision = "QUARANTINE_REVIEW"
-            if u_x >= self.tau_uncertainty:
-                reason = "UNCERTAINTY_OVER_TAU_U_OOD_QUERY"
-            else:
-                reason = "MODERATE_RISK_HOMONYM_DISAMBIGUATION"
+            reason = "MODERATE_RISK_HOMONYM_DISAMBIGUATION"
+        elif u_x >= self.tau_uncertainty and r_x >= 0.20:
+            decision = "QUARANTINE_REVIEW"
+            reason = "UNCERTAINTY_OVER_TAU_U_OOD_QUERY"
         else:
             decision = "ALLOW"
             reason = "BENIGN_QUERY_LOW_RISK"
@@ -121,3 +126,4 @@ class RiskCalibrator:
         }
 
         return explanation
+

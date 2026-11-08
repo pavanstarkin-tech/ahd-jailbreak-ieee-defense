@@ -89,20 +89,35 @@ class AHDJailbreakGuard:
         """
         Loads AHD-Jailbreak guardrail from Hugging Face Model Hub or local directory.
         """
+        snapshot_path = None
         if os.path.isdir(pretrained_model_name_or_path):
             config = AHDConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
             onnx_path = os.path.join(pretrained_model_name_or_path, "models", "minilm_int8.onnx")
+            snap_cand = os.path.join(pretrained_model_name_or_path, "models", "hypergraph_snapshot.pt")
+            if os.path.exists(snap_cand):
+                snapshot_path = snap_cand
             if not os.path.exists(onnx_path):
                 onnx_path = None
         else:
             # Download from Hugging Face Model Hub
+            from huggingface_hub import hf_hub_download
             try:
                 config = AHDConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
             except Exception:
                 config = AHDConfig(**kwargs)
-            onnx_path = None
+            try:
+                onnx_path = hf_hub_download(repo_id=pretrained_model_name_or_path, filename="models/minilm_int8.onnx")
+            except Exception:
+                onnx_path = None
+            try:
+                snapshot_path = hf_hub_download(repo_id=pretrained_model_name_or_path, filename="models/hypergraph_snapshot.pt")
+            except Exception:
+                snapshot_path = None
 
-        return cls(config=config, runtime=runtime, onnx_model_path=onnx_path)
+        guard = cls(config=config, runtime=runtime, onnx_model_path=onnx_path)
+        if snapshot_path and os.path.exists(snapshot_path):
+            guard.hypergraph = HeterogeneousHypergraph.load_snapshot(snapshot_path)
+        return guard
 
     def evaluate(
         self,
@@ -117,6 +132,7 @@ class AHDJailbreakGuard:
 
         # Extract prior turns
         prior_texts = [h.get("content", "") for h in (history or []) if h.get("role") == "user"]
+        is_single = len(prior_texts) == 0
 
         # 1. 394-D Feature Extraction
         x_394, meta = self.feature_extractor.extract(prompt, prior_turns=prior_texts)
@@ -128,33 +144,47 @@ class AHDJailbreakGuard:
             max_nodes=self.config.max_ego_nodes
         )
 
-        # 3. Compute Spectral Logit Approximation
+        # 3. Compute Spectral Logit Approximation from Real Anchors and Surface Features
         edge_weights = [self.hypergraph.edge_weights.get(e, 1.0) for e in ego_edges]
         edge_purities = [self.hypergraph.edge_purities.get(e, 0.5) for e in ego_edges]
 
+        k_anchors = [nid for nid in ego_nodes if nid in self.hypergraph.node_labels][:self.config.k_neighbors]
+        if k_anchors:
+            nbr_mean = float(np.mean([self.hypergraph.node_labels[nid] for nid in k_anchors]))
+        elif edge_purities:
+            nbr_mean = float(np.mean(edge_purities))
+        else:
+            nbr_mean = 0.5
+
         # Surface indicators contribution
+        has_b64 = float(meta.get("has_base64", 0.0))
+        zw_cnt = float(meta.get("zero_width_count", 0.0))
+        entropy = float(meta.get("char_entropy", 0.0))
+        drift = float(meta.get("turn_drift", 0.0))
+        override_cnt = float(meta.get("override_verb_count", 0.0))
+        roleplay_cnt = float(meta.get("roleplay_marker_count", 0.0))
+
         surface_risk = (
-            meta["has_base64"] * 1.5 +
-            (meta["zero_width_count"] > 0) * 1.2 +
-            (meta["char_entropy"] > 4.5) * 0.8 +
-            (meta["turn_drift"] > 0.5) * 1.0 +
-            (meta["override_verb_count"] > 0) * 0.8 +
-            (meta["roleplay_marker_count"] > 0) * 0.8
+            has_b64 * 5.0 +
+            (zw_cnt > 0) * 2.0 +
+            (entropy > 4.8) * 1.0 +
+            (drift > 0.4) * 2.0 +
+            override_cnt * 3.5 +
+            roleplay_cnt * 3.0
         )
 
-        # Neighbor purity contribution
-        nbr_mean = float(np.mean(edge_purities)) if edge_purities else 0.5
-        raw_logit = float((nbr_mean - 0.5) * 3.5 + surface_risk - 0.7)
+        raw_logit = float((nbr_mean - 0.5) * 6.0 + surface_risk - 1.8)
 
         # 4. Calibrated Multi-Signal Risk Fusion
-        ood_dist = float(np.clip(meta["turn_drift"] * 0.8, 0.0, 1.0))
+        ood_dist = float(np.clip(drift * 0.8, 0.0, 1.0))
         risk_result = self.risk_calibrator.evaluate_risk(
             raw_logit=raw_logit,
-            neighbor_purities=edge_purities,
-            edge_weights=edge_weights,
-            turn_drift=meta["turn_drift"],
+            neighbor_purities=[nbr_mean] if k_anchors else edge_purities,
+            edge_weights=[1.0] if k_anchors else edge_weights,
+            turn_drift=drift,
             ood_distance=ood_dist,
-            surface_meta=meta
+            surface_meta=meta,
+            is_single_turn=is_single
         )
 
         lat_ms = round((time.perf_counter() - t0) * 1000.0, 2)
@@ -169,6 +199,14 @@ class AHDJailbreakGuard:
             explanation=risk_result,
             snapshot_id="graph_v1"
         )
+
+    def predict(
+        self,
+        prompt: str,
+        history: Optional[List[Dict[str, str]]] = None
+    ) -> AHDOutput:
+        """Alias for evaluate()."""
+        return self.evaluate(prompt, history=history)
 
     def wrap_llm(
         self,
@@ -199,3 +237,4 @@ __all__ = [
     "RiskCalibrator",
     "AnchorValidationGate"
 ]
+

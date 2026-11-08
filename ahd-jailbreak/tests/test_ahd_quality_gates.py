@@ -132,3 +132,4 @@ def test_gate5_privacy_hmac_sha256_audit():
     finally:
         if os.path.exists(db_file):
             os.remove(db_file)
+

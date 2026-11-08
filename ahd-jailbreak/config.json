@@ -15,7 +15,7 @@
   "tau_allow": 0.35,
   "tau_block": 0.70,
   "tau_uncertainty": 0.45,
-  "temperature_cal": 4.56,
+  "temperature_cal": 0.84,
   "k_neighbors": 10,
   "max_ego_nodes": 120,
   "ema_alpha": 0.25,
@@ -25,3 +25,4 @@
   "torch_dtype": "float32",
   "transformers_version": "4.40.0"
 }
+

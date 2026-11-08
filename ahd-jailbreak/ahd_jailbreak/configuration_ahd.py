@@ -24,7 +24,7 @@ class AHDConfig(PretrainedConfig):
         tau_allow: float = 0.35,
         tau_block: float = 0.70,
         tau_uncertainty: float = 0.45,
-        temperature_cal: float = 4.56,
+        temperature_cal: float = 0.84,
         k_neighbors: int = 10,
         max_ego_nodes: int = 120,
         ema_alpha: float = 0.25,
@@ -53,3 +53,4 @@ class AHDConfig(PretrainedConfig):
         self.ema_max_delta = ema_max_delta
         self.core_anchor_lock_pct = core_anchor_lock_pct
         self.base_encoder = base_encoder
+

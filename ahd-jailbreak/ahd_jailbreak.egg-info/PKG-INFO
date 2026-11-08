@@ -68,7 +68,7 @@ inference: false
 
 # 🛡️ AHD-Jailbreak: Adaptive Hypergraph Defense with Anchor-Gated Topology
 
-[![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model%20Hub-yellow.svg)](https://huggingface.co/ahd-security/ahd-jailbreak-v1)
+[![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model%20Hub-yellow.svg)](https://huggingface.co/shesettipavankumarswamy/ahd-jailbreak-v1)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
 [![Latency](https://img.shields.io/badge/Latency-6.00ms%20(CPU)-green.svg)]()
@@ -97,7 +97,7 @@ pip install ahd-jailbreak
 from ahd_jailbreak import AHDJailbreakGuard
 
 # Initialize guardrail (loads quantized ONNX INT8 engine for 6ms CPU inference)
-guard = AHDJailbreakGuard.from_pretrained("ahd-security/ahd-jailbreak-v1", runtime="onnx-int8")
+guard = AHDJailbreakGuard.from_pretrained("shesettipavankumarswamy/ahd-jailbreak-v1", runtime="onnx-int8")
 
 # Evaluate an active prompt against multi-turn conversation history
 result = guard.evaluate(
@@ -249,3 +249,4 @@ If you use AHD-Jailbreak in your research or production infrastructure, please c
 ## 📄 License
 
 Licensed under the [Apache License, Version 2.0](LICENSE).
+

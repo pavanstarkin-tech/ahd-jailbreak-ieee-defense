@@ -146,3 +146,4 @@ class AnchorValidationGate:
         }
 
         return promoted, audit_result
+

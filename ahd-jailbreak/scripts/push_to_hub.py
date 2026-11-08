@@ -37,7 +37,7 @@ def push_to_hub(repo_id: str, token: str, private: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--repo-id", default="ahd-security/ahd-jailbreak-v1", help="Target Hugging Face repo ID")
+    parser.add_argument("--repo-id", default="shesettipavankumarswamy/ahd-jailbreak-v1", help="Target Hugging Face repo ID")
     parser.add_argument("--token", default=os.getenv("HF_TOKEN"), help="Hugging Face API token")
     parser.add_argument("--private", action="store_true", help="Set repository to private")
     args = parser.parse_args()
@@ -47,3 +47,4 @@ if __name__ == "__main__":
         exit(1)
 
     push_to_hub(args.repo_id, args.token, args.private)
+

@@ -208,6 +208,25 @@ class HeterogeneousHypergraph:
 
         return X_sub, P_t
 
+    @classmethod
+    def load_snapshot(cls, snapshot_path: str) -> "HeterogeneousHypergraph":
+        """Loads a pre-built hypergraph snapshot from disk."""
+        import torch
+        snap = torch.load(snapshot_path, map_location="cpu")
+        g = cls(feature_dim=394)
+        g.nodes = snap.get("nodes", {})
+        g.node_labels = snap.get("node_labels", {})
+        g.edge_types = snap.get("edge_types", {})
+        g.edge_weights = snap.get("edge_weights", {})
+        g.edge_purities = snap.get("edge_purities", {})
+        g.hyperedges = {k: set(v) for k, v in snap.get("hyperedges", {}).items()}
+        for nid, feat in snap.get("node_features", {}).items():
+            if isinstance(feat, torch.Tensor):
+                g.node_features[nid] = feat.numpy().astype(np.float32)
+            else:
+                g.node_features[nid] = np.array(feat, dtype=np.float32)
+        return g
+
 
 def build_default_hypergraph() -> HeterogeneousHypergraph:
     """
@@ -215,34 +234,72 @@ def build_default_hypergraph() -> HeterogeneousHypergraph:
     with stratified BeaverTails anchors, safety policies, tactic families,
     and contrastive safe clusters from XSTest.
     """
+    import os
+    # Check if pre-built snapshot exists
+    snap_candidates = [
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models", "hypergraph_snapshot.pt")),
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "models", "hypergraph_snapshot.pt")),
+    ]
+    for sc in snap_candidates:
+        if os.path.exists(sc):
+            return HeterogeneousHypergraph.load_snapshot(sc)
+
     g = HeterogeneousHypergraph(feature_dim=394)
     rng = np.random.RandomState(42)
+
+    # Check if processed features exist for real anchors
+    feat_paths = [
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed", "features_394d.npz")),
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "processed", "features_394d.npz")),
+        "data/processed/features_394d.npz"
+    ]
+    real_feats = None
+    real_labels = None
+    for fp in feat_paths:
+        if os.path.exists(fp):
+            try:
+                npz = np.load(fp)
+                splits = npz["splits"]
+                tr_mask = (splits == "train")
+                X_tr = npz["X"][tr_mask]
+                y_tr = npz["y"][tr_mask]
+                safe_idx = np.where(y_tr == 0)[0][:2000]
+                harm_idx = np.where(y_tr == 1)[0][:2000]
+                real_feats = np.vstack([X_tr[safe_idx], X_tr[harm_idx]])
+                real_labels = np.concatenate([np.zeros(2000, dtype=int), np.ones(2000, dtype=int)])
+                break
+            except Exception:
+                pass
 
     # 1. Safety Policy Vertices V_C (K_C = 10)
     for idx, pol in enumerate(HeterogeneousHypergraph.POLICY_CATEGORIES):
         feat = rng.randn(394).astype(np.float32)
-        feat[:384] /= np.linalg.norm(feat[:384])
+        feat[:384] /= (np.linalg.norm(feat[:384]) + 1e-9)
         g.add_node(f"pol_{idx+1:02d}", "policy_category", feat, label=1, metadata={"name": pol})
 
     # 2. Tactic Family Vertices V_A (K_A = 10)
     for idx, tac in enumerate(HeterogeneousHypergraph.TACTIC_FAMILIES):
         label = 0 if "BF-" in tac else 1
         feat = rng.randn(394).astype(np.float32)
-        feat[:384] /= np.linalg.norm(feat[:384])
+        feat[:384] /= (np.linalg.norm(feat[:384]) + 1e-9)
         g.add_node(f"tac_{idx+1:02d}", "tactic_family", feat, label=label, metadata={"name": tac})
 
     # 3. Semantic Centroids V_S (K_S = 64: 32 harmful, 32 contrastive safe)
     for idx in range(64):
         label = 1 if idx < 32 else 0
         feat = rng.randn(394).astype(np.float32)
-        feat[:384] /= np.linalg.norm(feat[:384])
+        feat[:384] /= (np.linalg.norm(feat[:384]) + 1e-9)
         g.add_node(f"centroid_{idx+1:02d}", "semantic_centroid", feat, label=label)
 
-    # 4. Stratified Anchor Prompts V_P (4,000 prompts)
+    # 4. Stratified Anchor Prompts V_P (4,000 prompts: 2,000 safe, 2,000 harmful)
     for idx in range(4000):
-        label = 1 if (idx % 2 == 0) else 0
-        feat = rng.randn(394).astype(np.float32)
-        feat[:384] /= np.linalg.norm(feat[:384])
+        if real_feats is not None:
+            feat = real_feats[idx].astype(np.float32)
+            label = int(real_labels[idx])
+        else:
+            label = 0 if idx < 2000 else 1
+            feat = rng.randn(394).astype(np.float32)
+            feat[:384] /= (np.linalg.norm(feat[:384]) + 1e-9)
         g.add_node(f"anchor_{idx+1:04d}", "anchor_prompt", feat, label=label)
 
     # 5. Connect 198 Canonical Hyperedges
@@ -270,3 +327,4 @@ def build_default_hypergraph() -> HeterogeneousHypergraph:
         g.add_hyperedge(f"e_ctx_{idx+1:03d}", "conversation_trajectory", anchors)
 
     return g
+
